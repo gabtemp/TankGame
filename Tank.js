@@ -2,7 +2,7 @@ function Tank() {
 	
 	this.x = 0;
 	this.y = 0;
-	this.velocity = 3;
+	this.speed = 3;
 
 	this.xSpeed = 0;
 	this.ySpeed = 0;
@@ -13,6 +13,8 @@ function Tank() {
 	this.lastShot = -1000;
 
 	this.bullets = [];
+	this.bulletSize = 7;
+	this.bulletSpeed = 10 ;
 	this.dir = 0;
 
 	this.update = function() {
@@ -23,7 +25,7 @@ function Tank() {
 		fill(255);
 
 		for (var i = this.bullets.length - 1; i >= 0; i--) {
-			ellipse(this.bullets[i].x + _scale / 2, this.bullets[i].y + _scale / 2, 5);
+			ellipse(this.bullets[i].x + _scale, this.bullets[i].y, this.bulletSize);
 		}
 
 		rect(this.x, this.y, _scale, _scale);
@@ -51,13 +53,10 @@ function Tank() {
 		var deleteIndexes = []
 		for (var i = this.bullets.length - 1; i >= 0; i--) {
 			bullet = this.bullets[i];
-			x = bullet.x + this.xDirection[bullet.z] * 5;
-			y = bullet.y + this.yDirection[bullet.z] * 5;
+			x = bullet.x + this.xDirection[bullet.z] * this.bulletSpeed;
+			y = bullet.y + this.yDirection[bullet.z] * this.bulletSpeed;
 
-			// console.log(x + ' = ' + bullet.x + " * " + this.xDirection[bullet.z] + "(" + bullet.z + ")");
-			// console.log(y + ' = ' + bullet.y + " * " + this.yDirection[bullet.z] + "(" + bullet.z + ")");
-
-			if(x > width || y > height || x < 0 || y < 0) {
+			if(x > width + 100 || y > height + 100 || x < -100 || y < -100) {
 				deleteIndexes.push(i);
 			} else {
 				this.bullets[i] = createVector(x, y, bullet.z);
@@ -68,12 +67,13 @@ function Tank() {
 			this.bullets.splice(i, 1);
 		}
 
+		// SPACE = 32
 		if(keyIsDown(32)) {
 			this.fire();
 		}
 
-		this.x = this.x + this.xSpeed * this.velocity;
-		this.y = this.y + this.ySpeed * this.velocity;
+		this.x = this.x + this.xSpeed * this.speed;
+		this.y = this.y + this.ySpeed * this.speed;
 
 		this.x = constrain(this.x, 0, width - _scale -1);
 		this.y = constrain(this.y, 0, height - _scale -1);
@@ -82,7 +82,7 @@ function Tank() {
 	this.fire = function() {
 		if(millis() - this.lastShot > this.cooldown) {
 			this.lastShot = millis();
-			this.bullets[this.bullets.length] = createVector(this.x, this.y, this.dir)
+			this.bullets[this.bullets.length] = createVector(this.x - _scale / 2, this.y + _scale / 2, this.dir)
 		}
 
 	}
