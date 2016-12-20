@@ -8,6 +8,7 @@ function setup() {
 	this.frames = 0;
 	this.updates = 0;
 	this.game = new Game();
+	_scale = 30;
 	frameRate(100);
 }
 
