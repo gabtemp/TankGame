@@ -11,6 +11,7 @@ function Game() {
 			this.targets[i].update();
 		}
 
+		MIN_TARGETS = 1 + floor(this.player.points / 10000)
 		while(this.targets.length < MIN_TARGETS) {
 			this.targets[this.targets.length] = new Target(this.targets, this.targets.length);
 		}
@@ -23,6 +24,10 @@ function Game() {
 		for (var i = 0; i < this.targets.length; i++) {
 			this.targets[i].render();
 		}
+
+		fill(0)
+		textSize(32);
+		text("Points: " + this.player.points, 10, 30);
 	}
 
 	this.checkColision = function() {
@@ -36,6 +41,7 @@ function Game() {
 
 				hit = collideRectCircle(target.x, target.y , _scale, _scale, bullet.x, bullet.y, bulletSize);
 				if(hit) {
+					this.player.addPoints(target.points);
 					target.die();
 				}
 			}

@@ -19,8 +19,9 @@ function Player() {
 
 	this.dead = false;
 
-	this.update = function() {
+	this.points = 0;
 
+	this.update = function() {
 		if(this.dead) {
 			this.dead = false;
 
@@ -101,5 +102,9 @@ function Player() {
 
 	this.die = function() {
 		this.dead = true;
+	}
+
+	this.addPoints = function(points){
+		this.points += points;
 	}
 }
