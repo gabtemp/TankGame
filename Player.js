@@ -1,4 +1,4 @@
-function Tank() {
+function Player() {
 	
 	this.x = 0;
 	this.y = 0;
@@ -17,36 +17,37 @@ function Tank() {
 	this.bulletSpeed = 10 ;
 	this.dir = 0;
 
+	this.dead = false;
+
 	this.update = function() {
-		this.move();
-	}
 
-	this.render = function() {
-		fill(255);
+		if(this.dead) {
+			this.dead = false;
 
-		for (var i = this.bullets.length - 1; i >= 0; i--) {
-			ellipse(this.bullets[i].x + _scale, this.bullets[i].y, this.bulletSize);
+			this.x = 0;
+			this.y = 0;
+			this.bullets = [];
+			this.dir = 0;
 		}
 
-		rect(this.x, this.y, _scale, _scale);
-
-	}
-
-	this.move = function() {
 		this.xSpeed = 0;
 		this.ySpeed = 0;
 
 		if (keyIsDown(UP_ARROW)) {
-			this.ySpeed =+ -1;
+			this.xSpeed = 0;
+			this.ySpeed = -1;
 			this.dir = 0;
 		} else if (keyIsDown(DOWN_ARROW)) {
-			this.ySpeed =+ 1;
+			this.xSpeed = 0;
+			this.ySpeed = 1;
 			this.dir = 1;
 		} else if (keyIsDown(RIGHT_ARROW)) {
-			this.xSpeed =+ 1;
+			this.xSpeed = 1;
+			this.ySpeed = 0;
 			this.dir = 2;
 		} else if (keyIsDown(LEFT_ARROW)) {
-			this.xSpeed =+ -1;
+			this.xSpeed = -1;
+			this.ySpeed = 0;
 			this.dir = 3;
 		}
 
@@ -72,18 +73,33 @@ function Tank() {
 			this.fire();
 		}
 
-		this.x = this.x + this.xSpeed * this.speed;
-		this.y = this.y + this.ySpeed * this.speed;
+		x = this.x + this.xSpeed * this.speed;
+		y = this.y + this.ySpeed * this.speed;
+		this.x = constrain(x, 0, width - _scale -1);
+		this.y = constrain(y, 0, height - _scale -1);
+	}
 
-		this.x = constrain(this.x, 0, width - _scale -1);
-		this.y = constrain(this.y, 0, height - _scale -1);
+	this.render = function() {
+		fill(255);
+		for (var i = this.bullets.length - 1; i >= 0; i--) {
+			ellipse(this.bullets[i].x, this.bullets[i].y, this.bulletSize);
+		}
+
+		fill('green');
+		rect(this.x, this.y, _scale, _scale);
+
 	}
 
 	this.fire = function() {
 		if(millis() - this.lastShot > this.cooldown) {
 			this.lastShot = millis();
-			this.bullets[this.bullets.length] = createVector(this.x - _scale / 2, this.y + _scale / 2, this.dir)
+			// Bullet has to start in the center of the tank
+			this.bullets[this.bullets.length] = createVector(this.x + _scale / 2, this.y + _scale / 2, this.dir)
 		}
 
+	}
+
+	this.die = function() {
+		this.dead = true;
 	}
 }

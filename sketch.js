@@ -10,6 +10,7 @@ function setup() {
 	this.game = new Game();
 	_scale = 30;
 	frameRate(100);
+	collideDebug(true);
 }
 
 function draw() {
