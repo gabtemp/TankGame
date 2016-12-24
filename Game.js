@@ -11,7 +11,7 @@ function Game() {
 			this.targets[i].update();
 		}
 
-		MIN_TARGETS = 1 + floor(this.player.points / 10000)
+		MIN_TARGETS = 1 + floor(this.player.points / 1000)
 		while(this.targets.length < MIN_TARGETS) {
 			this.targets[this.targets.length] = new Target(this.targets, this.targets.length);
 		}
@@ -32,12 +32,12 @@ function Game() {
 
 	this.checkColision = function() {
 		bulletSize = this.player.bulletSize;
-		for (var i = this.targets.length - 1; i >= 0; i--) {
-			target = this.targets[i];
+		for (var targetId = this.targets.length - 1; targetId >= 0; targetId--) {
+			target = this.targets[targetId];
 
 			// Cheking bullet collision
-			for (var i = this.player.bullets.length - 1; i >= 0; i--) {
-				bullet = this.player.bullets[i];
+			for (var bulletId = this.player.bullets.length - 1; bulletId >= 0; bulletId--) {
+				bullet = this.player.bullets[bulletId];
 
 				hit = collideRectCircle(target.x, target.y , _scale, _scale, bullet.x, bullet.y, bulletSize);
 				if(hit) {
@@ -48,9 +48,9 @@ function Game() {
 
 			// Cheking player collision
 			hit = collideRectRect(target.x, target.y , _scale, _scale, this.player.x, this.player.y, _scale, _scale);
-				if(hit) {
-					this.player.die();
-				}
+			if(hit) {
+				this.player.die();
+			}
 		}
 	}
 }
