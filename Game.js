@@ -49,6 +49,7 @@ function Game() {
 			hit = collideRectCircle(target.x, target.y , _scale, _scale, bullet.x, bullet.y, this.player.bulletSize);
 			if(hit && !target.dead) {
 				this.player.addPoints(target.points);
+				this.player.bullets.splice(bulletId, 1);
 				target.die();
 			}
 		}
