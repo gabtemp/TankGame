@@ -58,6 +58,14 @@ function Player() {
 		this.y = constrain(y, 0, height - _scale - 1);
 	}
 
+	this.checkColision = function(target) {
+		this.cannon.checkColision(target);
+		hit = collideRectRect(target.x, target.y , _scale, _scale, this.x, this.y, _scale, _scale);
+		if(hit) {
+			this.die();
+		}
+	}
+
 	this.render = function() {
 		this.cannon.render();
 		fill('green');

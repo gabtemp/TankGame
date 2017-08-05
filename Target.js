@@ -9,7 +9,7 @@ function Target() {
 
 	this.points = 1000;
 	this.min_points = 100;
-	this.points_rate = 1/10;
+	this.points_rate = 1/(60 * 100000);
 
 	this.update = function() {
 		if(this.points > this.min_points) {
@@ -18,6 +18,10 @@ function Target() {
 
 		this.cannon.fire(this.x, this.y, this.dir);
 		this.cannon.update();
+	}
+
+	this.checkColision = function(target) {
+		this.cannon.checkColision(target);
 	}
 
 	this.render = function() {

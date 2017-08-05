@@ -8,24 +8,17 @@ function Game() {
 	this.update = function() {
 		this.player.update();
 		for (var i = 0; i < this.targets.length; i++) {
-			this.targets[i].update();
-		}
+			target = this.targets[i];
+			target.update();
 
-		new_targets=[]
+			this.player.checkColision(target);
+			target.checkColision(this.player);
 
-		for (var targetId = 0; targetId < this.targets.length; targetId++) {
-			target = this.targets[targetId];
-			this.checkColision(target);
-			target.cannon.checkColision(this.player);
-
-			if(!target.dead) {
-				new_targets.push(target);
-			} else {
+			if(target.dead) {
 				this.player.addPoints(target.points);
+				this.targets.splice(i, 1);
 			}
 		}
-
-		this.targets = new_targets;
 
 		while(this.targets.length < MIN_TARGETS) {
 			this.targets.push(new Target());
@@ -42,15 +35,5 @@ function Game() {
 		fill(0)
 		textSize(32);
 		text("Points: " + this.player.points, 10, 30);
-	}
-
-	this.checkColision = function(target) {
-		this.player.cannon.checkColision(target);
-
-		// Cheking player collision
-		hit = collideRectRect(target.x, target.y , _scale, _scale, this.player.x, this.player.y, _scale, _scale);
-		if(hit) {
-			this.player.die();
-		}
 	}
 }
