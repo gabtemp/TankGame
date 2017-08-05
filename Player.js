@@ -8,7 +8,7 @@ function Player() {
 	this.ySpeed = 0;
 	this.dir = 0;
 
-	this.cannon = new Cannon();
+	this.cannon = new Cannon(1000);
 
 	this.dead = false;
 

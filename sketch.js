@@ -15,7 +15,6 @@ function setup() {
 	_scale = 30;
 	xDirection = {0:0, 1:0, 2:1, 3:-1};
 	yDirection = {0:-1, 1:1, 2:0, 3:0};
-
 }
 
 function draw() {

@@ -16,9 +16,12 @@ function Game() {
 		for (var targetId = 0; targetId < this.targets.length; targetId++) {
 			target = this.targets[targetId];
 			this.checkColision(target);
+			target.cannon.checkColision(this.player);
 
 			if(!target.dead) {
 				new_targets.push(target);
+			} else {
+				this.player.addPoints(target.points);
 			}
 		}
 
@@ -42,17 +45,7 @@ function Game() {
 	}
 
 	this.checkColision = function(target) {
-		// Cheking bullet collision
-		for (var bulletId = this.player.cannon.bullets.length - 1; bulletId >= 0; bulletId--) {
-			bullet = this.player.cannon.bullets[bulletId];
-
-			hit = collideRectCircle(target.x, target.y , _scale, _scale, bullet.x, bullet.y, this.player.cannon.bulletSize);
-			if(hit && !target.dead) {
-				this.player.addPoints(target.points);
-				this.player.cannon.bullets.splice(bulletId, 1);
-				target.die();
-			}
-		}
+		this.player.cannon.checkColision(target);
 
 		// Cheking player collision
 		hit = collideRectRect(target.x, target.y , _scale, _scale, this.player.x, this.player.y, _scale, _scale);

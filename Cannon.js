@@ -1,7 +1,7 @@
-function Cannon() {
+function Cannon(cooldown) {
 
-    this.cooldown = 1000;
-	this.lastShot = 0;
+	this.cooldown = cooldown;
+	this.lastShot = millis();
 
     this.bullets = [];
 	this.bulletSize = 7;
@@ -39,6 +39,18 @@ function Cannon() {
         fill(255);
 		for (var i = this.bullets.length - 1; i >= 0; i--) {
 			ellipse(this.bullets[i].x, this.bullets[i].y, this.bulletSize);
+		}
+	}
+	
+	this.checkColision = function(target) {
+		for (var bulletId = this.bullets.length - 1; bulletId >= 0; bulletId--) {
+			bullet = this.bullets[bulletId];
+
+			hit = collideRectCircle(target.x, target.y , _scale, _scale, bullet.x, bullet.y, this.bulletSize);
+			if(hit && !target.dead) {
+				this.bullets.splice(bulletId, 1);
+				target.die();
+			}
 		}
     }
 }
