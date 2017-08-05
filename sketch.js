@@ -1,5 +1,5 @@
 function setup() {
-	createCanvas(800, 800);
+	createCanvas(800, 600);
 	
 	this.timer = millis();
 	this.lastTime = millis();
@@ -8,9 +8,14 @@ function setup() {
 	this.frames = 0;
 	this.updates = 0;
 	this.game = new Game();
-	_scale = 30;
 	frameRate(100);
 	collideDebug(true);
+
+	// Global vars
+	_scale = 30;
+	xDirection = {0:0, 1:0, 2:1, 3:-1};
+	yDirection = {0:-1, 1:1, 2:0, 3:0};
+
 }
 
 function draw() {

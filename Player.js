@@ -6,16 +6,9 @@ function Player() {
 
 	this.xSpeed = 0;
 	this.ySpeed = 0;
-	this.xDirection = {0:0, 1:0, 2:1, 3:-1};
-	this.yDirection = {0:-1, 1:1, 2:0, 3:0};
-
-	this.cooldown = 1000;
-	this.lastShot = -1000;
-
-	this.bullets = [];
-	this.bulletSize = 7;
-	this.bulletSpeed = 10 ;
 	this.dir = 0;
+
+	this.cannon = new Cannon();
 
 	this.dead = false;
 
@@ -52,26 +45,11 @@ function Player() {
 			this.dir = 3;
 		}
 
-		var deleteIndexes = []
-		for (var i = 0; i < this.bullets.length; i++) {
-			bullet = this.bullets[i];
-			x = bullet.x + this.xDirection[bullet.z] * this.bulletSpeed;
-			y = bullet.y + this.yDirection[bullet.z] * this.bulletSpeed;
-
-			if(x > width + 100 || y > height + 100 || x < -100 || y < -100) {
-				deleteIndexes.push(i);
-			} else {
-				this.bullets[i] = createVector(x, y, bullet.z);
-			}
-		}
-
-		for (var i = deleteIndexes.length - 1; i >= 0; i--) {
-			this.bullets.splice(i, 1);
-		}
+		this.cannon.update();
 
 		// SPACE = 32
 		if(keyIsDown(32)) {
-			this.fire();
+			this.cannon.fire(this.x, this.y, this.dir);
 		}
 
 		x = this.x + this.xSpeed * this.speed;
@@ -81,22 +59,9 @@ function Player() {
 	}
 
 	this.render = function() {
-		fill(255);
-		for (var i = this.bullets.length - 1; i >= 0; i--) {
-			ellipse(this.bullets[i].x, this.bullets[i].y, this.bulletSize);
-		}
-
+		this.cannon.render();
 		fill('green');
 		rect(this.x, this.y, _scale, _scale);
-
-	}
-
-	this.fire = function() {
-		if(millis() - this.lastShot > this.cooldown) {
-			this.lastShot = millis();
-			// Bullet has to start in the center of the tank
-			this.bullets.push(createVector(this.x + _scale / 2, this.y + _scale / 2, this.dir));
-		}
 
 	}
 

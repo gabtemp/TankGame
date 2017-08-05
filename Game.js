@@ -43,13 +43,13 @@ function Game() {
 
 	this.checkColision = function(target) {
 		// Cheking bullet collision
-		for (var bulletId = this.player.bullets.length - 1; bulletId >= 0; bulletId--) {
-			bullet = this.player.bullets[bulletId];
+		for (var bulletId = this.player.cannon.bullets.length - 1; bulletId >= 0; bulletId--) {
+			bullet = this.player.cannon.bullets[bulletId];
 
-			hit = collideRectCircle(target.x, target.y , _scale, _scale, bullet.x, bullet.y, this.player.bulletSize);
+			hit = collideRectCircle(target.x, target.y , _scale, _scale, bullet.x, bullet.y, this.player.cannon.bulletSize);
 			if(hit && !target.dead) {
 				this.player.addPoints(target.points);
-				this.player.bullets.splice(bulletId, 1);
+				this.player.cannon.bullets.splice(bulletId, 1);
 				target.die();
 			}
 		}
