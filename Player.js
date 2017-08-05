@@ -53,7 +53,7 @@ function Player() {
 		}
 
 		var deleteIndexes = []
-		for (var i = this.bullets.length - 1; i >= 0; i--) {
+		for (var i = 0; i < this.bullets.length; i++) {
 			bullet = this.bullets[i];
 			x = bullet.x + this.xDirection[bullet.z] * this.bulletSpeed;
 			y = bullet.y + this.yDirection[bullet.z] * this.bulletSpeed;
@@ -76,8 +76,8 @@ function Player() {
 
 		x = this.x + this.xSpeed * this.speed;
 		y = this.y + this.ySpeed * this.speed;
-		this.x = constrain(x, 0, width - _scale -1);
-		this.y = constrain(y, 0, height - _scale -1);
+		this.x = constrain(x, 0, width - _scale - 1);
+		this.y = constrain(y, 0, height - _scale - 1);
 	}
 
 	this.render = function() {
@@ -95,7 +95,7 @@ function Player() {
 		if(millis() - this.lastShot > this.cooldown) {
 			this.lastShot = millis();
 			// Bullet has to start in the center of the tank
-			this.bullets[this.bullets.length] = createVector(this.x + _scale / 2, this.y + _scale / 2, this.dir)
+			this.bullets.push(createVector(this.x + _scale / 2, this.y + _scale / 2, this.dir));
 		}
 
 	}

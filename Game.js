@@ -11,18 +11,29 @@ function Game() {
 			this.targets[i].update();
 		}
 
-		MIN_TARGETS = 1 + floor(this.player.points / 1000)
-		while(this.targets.length < MIN_TARGETS) {
-			this.targets[this.targets.length] = new Target(this.targets, this.targets.length);
+		new_targets=[]
+
+		for (var targetId = 0; targetId < this.targets.length; targetId++) {
+			target = this.targets[targetId];
+			this.checkColision(target);
+
+			if(!target.dead) {
+				new_targets.push(target);
+			}
 		}
 
-		this.checkColision();
+		this.targets = new_targets;
+
+		while(this.targets.length < MIN_TARGETS) {
+			this.targets.push(new Target());
+		}
+		MIN_TARGETS = 1 + floor(this.player.points / 1000);
 	}
 
 	this.render = function() {
 		this.player.render();
-		for (var i = 0; i < this.targets.length; i++) {
-			this.targets[i].render();
+		for (var targetId = 0; targetId < this.targets.length; targetId++) {
+			this.targets[targetId].render();
 		}
 
 		fill(0)
@@ -30,27 +41,22 @@ function Game() {
 		text("Points: " + this.player.points, 10, 30);
 	}
 
-	this.checkColision = function() {
-		bulletSize = this.player.bulletSize;
-		for (var targetId = this.targets.length - 1; targetId >= 0; targetId--) {
-			target = this.targets[targetId];
+	this.checkColision = function(target) {
+		// Cheking bullet collision
+		for (var bulletId = this.player.bullets.length - 1; bulletId >= 0; bulletId--) {
+			bullet = this.player.bullets[bulletId];
 
-			// Cheking bullet collision
-			for (var bulletId = this.player.bullets.length - 1; bulletId >= 0; bulletId--) {
-				bullet = this.player.bullets[bulletId];
-
-				hit = collideRectCircle(target.x, target.y , _scale, _scale, bullet.x, bullet.y, bulletSize);
-				if(hit) {
-					this.player.addPoints(target.points);
-					target.die();
-				}
+			hit = collideRectCircle(target.x, target.y , _scale, _scale, bullet.x, bullet.y, this.player.bulletSize);
+			if(hit && !target.dead) {
+				this.player.addPoints(target.points);
+				target.die();
 			}
+		}
 
-			// Cheking player collision
-			hit = collideRectRect(target.x, target.y , _scale, _scale, this.player.x, this.player.y, _scale, _scale);
-			if(hit) {
-				this.player.die();
-			}
+		// Cheking player collision
+		hit = collideRectRect(target.x, target.y , _scale, _scale, this.player.x, this.player.y, _scale, _scale);
+		if(hit) {
+			this.player.die();
 		}
 	}
 }

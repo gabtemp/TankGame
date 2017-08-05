@@ -1,21 +1,16 @@
-function Target(allTargets, id) {
-
-	this.id = id;
-	this.allTargets = allTargets;
+function Target() {
 
 	this.x = random(0, width - _scale);
 	this.y = random(0, height - _scale);
 	this.dead = false;
 
 	this.points = 1000;
+	this.min_points = 100;
+	this.points_rate = 1/10;
 
 	this.update = function() {
-		if(this.dead) {
-			this.allTargets.splice(this.id, 1);
-		}
-
-		if(this.points > 100) {
-			this.points = floor(this.points - 1/10);
+		if(this.points > this.min_points) {
+			this.points = floor(this.points - this.points_rate);
 		}
 	}
 
@@ -29,5 +24,6 @@ function Target(allTargets, id) {
 
 	this.die = function() {
 		this.dead = true;
+		console.log("DEAD!")
 	}
 }
